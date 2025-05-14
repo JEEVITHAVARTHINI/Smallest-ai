@@ -2,73 +2,7 @@ openapi: 3.0.3
 info:
   title: Smallest AI API
   version: 1.0.0
-  description: |
-    Welcome to the Smallest AI API documentation. This guide will walk you through everything you need to get started using our endpoints effectively.
-
-    ### Authentication
-    All endpoints require an API key passed in the header:
-    ```bash
-    curl -H "Authorization: Bearer YOUR_API_KEY" https://api.smallest.ai/user/get-user-details
-    ```
-
-    #### Key Rotation
-    - Rotate keys periodically to reduce risk.
-    - Revoke old or compromised keys immediately.
-    - Use different keys for different environments (dev, staging, prod).
-
-    ### Error Codes & Troubleshooting
-    | Status Code | Meaning           | Troubleshooting Suggestion              |
-    |-------------|-------------------|------------------------------------------|
-    | 400         | Bad Request       | Check input format or required fields.  |
-    | 401         | Unauthorized      | Verify API key is valid and included.   |
-    | 404         | Not Found         | Ensure endpoint and path parameters are correct. |
-    | 500         | Server Error      | Retry or report to support.             |
-
-    ### SDK Usage
-    **Python Example:**
-    ```python
-    import requests
-    headers = {"Authorization": "Bearer YOUR_API_KEY"}
-    response = requests.get("https://api.smallest.ai/user/get-user-details", headers=headers)
-    print(response.json())
-    ```
-
-    **JavaScript Example:**
-    ```js
-    fetch("https://api.smallest.ai/user/get-user-details", {
-      headers: {"Authorization": "Bearer YOUR_API_KEY"}
-    }).then(res => res.json()).then(console.log);
-    ```
-
-    ### Endpoint Summary
-    | Tag             | Summary                           |
-    |------------------|------------------------------------|
-    | User             | Retrieve and manage user data      |
-    | Organization     | Manage organizations               |
-    | Agent Templates  | Work with agent templates          |
-    | Agents           | Operate and manage agents          |
-    | Logs             | Access and filter logs             |
-    | Calls            | Retrieve call info and transcripts |
-    | Knowledge Base   | Add, update, retrieve knowledge    |
-
-    ---
-
-    ## Introduction to Smallest AI
-    The Smallest AI platform empowers developers to build immersive, human-like voice experiences using our state-of-the-art speech synthesis APIs. Whether you're creating a virtual assistant, narrating dynamic content, or enabling natural voice interaction in your product, our APIs are designed to help you go from idea to implementation—fast.
-
-    At the core of our offering is Lightning, our ultra-low latency text-to-speech engine that generates high-quality audio with near-instant response times. For applications demanding greater realism and voice customization, we offer Lightning Large, which supports multilingual synthesis and custom voice cloning based on your audio samples.
-
-    ### Real-Time Voice with Streaming API
-    For developers building live, interactive applications—like games, voice assistants, or conferencing tools—Smallest AI also supports real-time streaming. Our Streaming API allows you to start receiving audio fragments as soon as the first bytes are generated. This low-latency experience is powered by our WebSocket-based interface, and integrates easily with platforms like WebRTC.
-
-    You can use streaming mode by setting stream=true in supported endpoints or via SDK methods like TextToAudioStream, which deliver speech in real time. This ensures a more fluid and natural user experience for your customers and enables use cases that standard REST APIs simply can’t support.
-
-    ### Webhook Support & Asynchronous Workflows
-    Certain operations—like voice cloning or long-form synthesis—may take a few seconds to complete. To avoid polling or blocking your system, our platform is being built to support webhooks and async job status notifications. Once implemented, you’ll be able to register a callback URL and receive push updates when tasks complete.
-
-    Even now, you can check job statuses via polling endpoints like /get_cloned_voices, and our APIs return helpful status fields so you can track processing workflows efficiently. This allows your applications to remain responsive while background jobs complete seamlessly.
-
-    Let us help you create intelligent, expressive, and scalable voice experiences. Explore the docs and start building today.
+  description: Welcome to the Smallest AI API documentation.
 
 servers:
   - url: https://api.smallest.ai
@@ -76,7 +10,8 @@ servers:
 
 tags:
   - name: Getting Started
-    description: Overview, authentication, SDK usage, and introduction to Smallest AI platform.
+    description: Everything you need to begin using the Smallest AI API.
+
   - name: User
     description: Retrieve and manage user-related data.
   - name: Organization
@@ -92,7 +27,94 @@ tags:
   - name: Knowledge Base
     description: Upload and retrieve documents.
 
+x-tagGroups:
+  - name: Getting Started
+    tags:
+      - Getting Started
+  - name: API Reference
+    tags:
+      - User
+      - Organization
+      - Agent Templates
+      - Agents
+      - Logs
+      - Calls
+      - Knowledge Base
+
 paths:
+  /getting-started:
+    get:
+      tags:
+        - Getting Started
+      summary: Getting Started Guide
+      description: |
+        The Smallest AI platform empowers developers to build immersive, human-like voice experiences using our state-of-the-art speech synthesis APIs. Whether you're creating a virtual assistant, narrating dynamic content, or enabling natural voice interaction in your product, our APIs are designed to help you go from idea to implementation—fast.
+
+        At the core of our offering is **Lightning**, our ultra-low latency text-to-speech engine that generates high-quality audio with near-instant response times. For applications demanding greater realism and voice customization, we offer **Lightning Large**, which supports multilingual synthesis and custom voice cloning based on your audio samples.
+
+        ### Authentication
+
+        All endpoints require an API key passed in the header:
+
+        ```bash
+        curl -H "Authorization: Bearer YOUR_API_KEY" https://api.smallest.ai/user/get-user-details
+        ```
+
+        #### Key Rotation
+        - Rotate keys periodically to reduce risk.
+        - Revoke old or compromised keys immediately.
+        - Use different keys for different environments (dev, staging, prod).
+
+        ### Error Codes & Troubleshooting
+
+        | Status Code | Meaning           | Troubleshooting Suggestion              |
+        |-------------|-------------------|------------------------------------------|
+        | 400         | Bad Request       | Check input format or required fields.  |
+        | 401         | Unauthorized      | Verify API key is valid and included.   |
+        | 404         | Not Found         | Ensure endpoint and path parameters are correct. |
+        | 500         | Server Error      | Retry or report to support.             |
+
+        ### SDK Usage
+
+        **Python Example:**
+        ```python
+        import requests
+        headers = {"Authorization": "Bearer YOUR_API_KEY"}
+        response = requests.get("https://api.smallest.ai/user/get-user-details", headers=headers)
+        print(response.json())
+        ```
+
+        **JavaScript Example:**
+        ```js
+        fetch("https://api.smallest.ai/user/get-user-details", {
+          headers: {"Authorization": "Bearer YOUR_API_KEY"}
+        }).then(res => res.json()).then(console.log);
+        ```
+
+        ### Endpoint Summary
+
+        | Tag             | Summary                           |
+        |------------------|------------------------------------|
+        | User             | Retrieve and manage user data      |
+        | Organization     | Manage organizations               |
+        | Agent Templates  | Work with agent templates          |
+        | Agents           | Operate and manage agents          |
+        | Logs             | Access and filter logs             |
+        | Calls            | Retrieve call info and transcripts |
+        | Knowledge Base   | Add, update, retrieve knowledge    |
+
+        ### Real-Time Voice with Streaming API
+
+        For developers building live, interactive applications—like games, voice assistants, or conferencing tools—Smallest AI also supports real-time streaming. Our Streaming API allows you to start receiving audio fragments as soon as the first bytes are generated.
+
+        ### Webhook Support & Asynchronous Workflows
+
+        Our platform is being built to support webhooks and async job notifications. In the meantime, use polling endpoints like `/get_cloned_voices` to monitor job status.
+
+      responses:
+        '200':
+          description: OK
+
   /user/get-user-details:
     get:
       tags:
