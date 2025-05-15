@@ -1,32 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Smallest AI API Docs</title>
-  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css">
-  <style>
-    html { box-sizing: border-box; overflow-y: scroll; }
-    *, *:before, *:after { box-sizing: inherit; }
-    body { margin: 0; background: #fafafa; }
-  </style>
-</head>
-<body>
-  <div id="swagger-ui"></div>
+<html>
+  <head>
+    <title>Smallest AI API Docs</title>
+    <style>
+      body { font-family: sans-serif; margin: 0; padding: 0; }
+      .tabs { display: flex; background: #f3f3f3; }
+      .tabs button {
+        padding: 12px 20px;
+        border: none;
+        background: #eee;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .tabs button.active { background: white; border-bottom: 2px solid white; }
+      .tab-content { display: none; height: 100vh; }
+      .tab-content.active { display: block; }
+    </style>
+  </head>
+  <body>
+    <div class="tabs">
+      <button id="redoc-tab" class="active" onclick="switchTab('redoc')">📘 Documentation</button>
+      <button id="swagger-tab" onclick="switchTab('swagger')">🧪 Try It Out</button>
+    </div>
 
-  <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
-  <script>
-    window.onload = () => {
-      SwaggerUIBundle({
-        url: "openapi.yaml",  // This loads your OpenAPI file
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIBundle.SwaggerUIStandalonePreset
-        ],
-        layout: "BaseLayout"
-      });
-    };
-  </script>
-</body>
+    <div id="redoc" class="tab-content active">
+      <redoc spec-url="openapi.yaml"></redoc>
+    </div>
+
+    <div id="swagger" class="tab-content">
+      <div id="swagger-ui"></div>
+    </div>
+
+    <!-- Redoc Script -->
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+
+    <!-- Swagger UI Scripts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js"></script>
+
+    <script>
+      function switchTab(tab) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.getElementById(tab).classList.add('active');
+
+        document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tab + '-tab').classList.add('active');
+      }
+
+      window.onload = function () {
+        SwaggerUIBundle({
+          url: "openapi.yaml",
+          dom_id: "#swagger-ui"
+        });
+      };
+    </script>
+  </body>
 </html>
