@@ -40,36 +40,27 @@ info:
     }).then(res => res.json()).then(console.log);
     ```
 
-    ### Endpoint Summary
-    | Tag             | Summary                           |
-    |------------------|------------------------------------|
-    | User             | Retrieve and manage user data      |
-    | Organization     | Manage organizations               |
-    | Agent Templates  | Work with agent templates          |
-    | Agents           | Operate and manage agents          |
-    | Logs             | Access and filter logs             |
-    | Calls            | Retrieve call info and transcripts |
-    | Knowledge Base   | Add, update, retrieve knowledge    |
-
 servers:
   - url: https://api.smallest.ai
     description: Production Server
 
 tags:
+  - name: Introduction
+    description: Overview of Smallest AI’s capabilities, features, and quickstart guide.
   - name: User
     description: Retrieve and manage user-related data.
   - name: Organization
-    description: Manage organization data.
+    description: Manage organizations and related information.
   - name: Agent Templates
-    description: Templates used to create agents.
+    description: Work with templates used to define agent behavior.
   - name: Agents
-    description: Agent-related endpoints.
+    description: Create, retrieve, and manage intelligent agents.
   - name: Logs
-    description: Access logs and audit trails.
+    description: View API usage, conversation logs, and debug output.
   - name: Calls
-    description: Call-related data and transcripts.
+    description: Access call data, metadata, and transcripts.
   - name: Knowledge Base
-    description: Upload and retrieve documents.
+    description: Upload, update, and retrieve documents for LLM context.
 
 paths:
   /user/get-user-details:
@@ -119,7 +110,7 @@ paths:
       tags:
         - Organization
       summary: Retrieve organization details
-      description: Fetch organization info by ID.
+      description: Fetch organization information by organization ID.
       parameters:
         - name: org_id
           in: query
@@ -135,7 +126,7 @@ paths:
       tags:
         - Agent Templates
       summary: List agent templates
-      description: Retrieve all available agent templates.
+      description: Retrieve all agent templates available for agent creation.
       responses:
         '200':
           description: Successful response
@@ -145,7 +136,7 @@ paths:
       tags:
         - Agents
       summary: Retrieve agent details
-      description: Get detailed info about a specific agent.
+      description: Get detailed info about a specific agent using its ID.
       parameters:
         - name: agent_id
           in: query
@@ -161,7 +152,7 @@ paths:
       tags:
         - Logs
       summary: Fetch logs
-      description: Access log data with filtering options.
+      description: Access logs related to user activity, errors, and agent responses.
       responses:
         '200':
           description: Successful response
@@ -171,7 +162,7 @@ paths:
       tags:
         - Calls
       summary: Retrieve call information
-      description: Get metadata or transcript of a call.
+      description: Get metadata or transcripts associated with a call ID.
       parameters:
         - name: call_id
           in: query
@@ -187,7 +178,7 @@ paths:
       tags:
         - Knowledge Base
       summary: Search the knowledge base
-      description: Perform search queries on the knowledge base.
+      description: Perform search queries across documents in the knowledge base.
       parameters:
         - name: query
           in: query
