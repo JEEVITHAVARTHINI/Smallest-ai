@@ -3,7 +3,53 @@ info:
   title: Smallest AI API
   version: 1.0.0
   description: |
-    Comprehensive Smallest AI API documentation with GET, POST, PUT, DELETE endpoints for all main resources.
+    Welcome to the Smallest AI API documentation. This guide will walk you through everything you need to get started using our endpoints effectively.
+
+    ### Authentication
+    All endpoints require an API key passed in the header:
+    ```bash
+    curl -H "Authorization: Bearer YOUR_API_KEY" https://api.smallest.ai/user/get-user-details
+    ```
+
+    #### Key Rotation
+    - Rotate keys periodically to reduce risk.
+    - Revoke old or compromised keys immediately.
+    - Use different keys for different environments (dev, staging, prod).
+
+    ### Error Codes & Troubleshooting
+    | Status Code | Meaning           | Troubleshooting Suggestion              |
+    |-------------|-------------------|------------------------------------------|
+    | 400         | Bad Request       | Check input format or required fields.  |
+    | 401         | Unauthorized      | Verify API key is valid and included.   |
+    | 404         | Not Found         | Ensure endpoint and path parameters are correct. |
+    | 500         | Server Error      | Retry or report to support.             |
+
+    ### SDK Usage
+    **Python Example:**
+    ```python
+    import requests
+    headers = {"Authorization": "Bearer YOUR_API_KEY"}
+    response = requests.get("https://api.smallest.ai/user/get-user-details", headers=headers)
+    print(response.json())
+    ```
+
+    **JavaScript Example:**
+    ```js
+    fetch("https://api.smallest.ai/user/get-user-details", {
+      headers: {"Authorization": "Bearer YOUR_API_KEY"}
+    }).then(res => res.json()).then(console.log);
+    ```
+
+    ### Endpoint Summary
+    | Tag             | Summary                           |
+    |-----------------|---------------------------------|
+    | User            | Retrieve and manage user data   |
+    | Organization    | Manage organizations            |
+    | Agent Templates | Work with agent templates       |
+    | Agents          | Operate and manage agents       |
+    | Logs            | Access and filter logs          |
+    | Calls           | Retrieve call info and transcripts |
+    | Knowledge Base  | Add, update, retrieve knowledge |
 
 servers:
   - url: https://api.smallest.ai
@@ -26,22 +72,24 @@ tags:
     description: Upload and retrieve documents.
 
 paths:
-
-  ### User Endpoints ###
+  # User Endpoints
   /user/get-user-details:
     get:
       tags:
         - User
       summary: Retrieve user info
+      description: Get detailed information about a user using their ID.
+      operationId: getUserDetails
       parameters:
         - name: user_id
           in: query
+          description: ID of the user
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: User details
+          description: Successful response with user details
           content:
             application/json:
               schema:
@@ -49,16 +97,31 @@ paths:
                 properties:
                   user_id:
                     type: string
+                    example: "123"
                   name:
                     type: string
+                    example: "John Doe"
                   email:
                     type: string
+                    example: "john@example.com"
+        '400':
+          description: Bad Request - Invalid input
+        '401':
+          description: Unauthorized - Invalid API key
+        '404':
+          description: Not Found - User does not exist
+        '500':
+          description: Server Error
+      security:
+        - bearerAuth: []
 
-  /user/create-user:
+  /user/create:
     post:
       tags:
         - User
       summary: Create a new user
+      description: Add a new user to the system.
+      operationId: createUser
       requestBody:
         required: true
         content:
@@ -76,12 +139,22 @@ paths:
       responses:
         '201':
           description: User created successfully
+        '400':
+          description: Bad Request - Invalid input
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server Error
+      security:
+        - bearerAuth: []
 
-  /user/update-user:
+  /user/update:
     put:
       tags:
         - User
-      summary: Update user details
+      summary: Update user information
+      description: Modify existing user details.
+      operationId: updateUser
       requestBody:
         required: true
         content:
@@ -100,12 +173,24 @@ paths:
       responses:
         '200':
           description: User updated successfully
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+        '500':
+          description: Server Error
+      security:
+        - bearerAuth: []
 
-  /user/delete-user:
+  /user/delete:
     delete:
       tags:
         - User
       summary: Delete a user
+      description: Remove a user by ID.
+      operationId: deleteUser
       parameters:
         - name: user_id
           in: query
@@ -115,13 +200,25 @@ paths:
       responses:
         '204':
           description: User deleted successfully
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+        '500':
+          description: Server Error
+      security:
+        - bearerAuth: []
 
-  ### Organization Endpoints ###
+  # Organization Endpoints
   /organization/get-org-details:
     get:
       tags:
         - Organization
       summary: Retrieve organization details
+      description: Fetch organization info by ID.
+      operationId: getOrgDetails
       parameters:
         - name: org_id
           in: query
@@ -130,13 +227,25 @@ paths:
             type: string
       responses:
         '200':
-          description: Organization details
+          description: Successful response with organization details
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Organization not found
+        '500':
+          description: Server Error
+      security:
+        - bearerAuth: []
 
-  /organization/create-org:
+  /organization/create:
     post:
       tags:
         - Organization
       summary: Create a new organization
+      description: Add a new organization.
+      operationId: createOrganization
       requestBody:
         required: true
         content:
@@ -148,17 +257,25 @@ paths:
               properties:
                 name:
                   type: string
-                address:
-                  type: string
       responses:
         '201':
-          description: Organization created successfully
+          description: Organization created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server Error
+      security:
+        - bearerAuth: []
 
-  /organization/update-org:
+  /organization/update:
     put:
       tags:
         - Organization
       summary: Update organization details
+      description: Modify organization info.
+      operationId: updateOrganization
       requestBody:
         required: true
         content:
@@ -172,17 +289,27 @@ paths:
                   type: string
                 name:
                   type: string
-                address:
-                  type: string
       responses:
         '200':
-          description: Organization updated successfully
+          description: Organization updated
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Organization not found
+        '500':
+          description: Server Error
+      security:
+        - bearerAuth: []
 
-  /organization/delete-org:
+  /organization/delete:
     delete:
       tags:
         - Organization
       summary: Delete an organization
+      description: Remove organization by ID.
+      operationId: deleteOrganization
       parameters:
         - name: org_id
           in: query
@@ -191,23 +318,43 @@ paths:
             type: string
       responses:
         '204':
-          description: Organization deleted successfully
+          description: Organization deleted
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Organization not found
+        '500':
+          description: Server Error
+      security:
+        - bearerAuth: []
 
-  ### Agent Templates Endpoints ###
+  # Agent Templates Endpoints
   /agent-templates/list:
     get:
       tags:
         - Agent Templates
       summary: List agent templates
+      description: Retrieve all available agent templates.
+      operationId: listAgentTemplates
       responses:
         '200':
-          description: List of agent templates
+          description: Successful response with list of agent templates
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server Error
+      security:
+        - bearerAuth: []
 
   /agent-templates/create:
     post:
       tags:
         - Agent Templates
       summary: Create an agent template
+      description: Add a new agent template.
+      operationId: createAgentTemplate
       requestBody:
         required: true
         content:
@@ -215,257 +362,18 @@ paths:
             schema:
               type: object
               required:
-                - name
+                - template_name
               properties:
-                name:
+                template_name:
                   type: string
                 description:
                   type: string
       responses:
         '201':
           description: Agent template created
-
-  /agent-templates/update:
-    put:
-      tags:
-        - Agent Templates
-      summary: Update an agent template
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - template_id
-              properties:
-                template_id:
-                  type: string
-                name:
-                  type: string
-                description:
-                  type: string
-      responses:
-        '200':
-          description: Agent template updated
-
-  /agent-templates/delete:
-    delete:
-      tags:
-        - Agent Templates
-      summary: Delete an agent template
-      parameters:
-        - name: template_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Agent template deleted
-
-  ### Agents Endpoints ###
-  /agents/get-agent:
-    get:
-      tags:
-        - Agents
-      summary: Retrieve agent details
-      parameters:
-        - name: agent_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Agent details
-
-  /agents/create-agent:
-    post:
-      tags:
-        - Agents
-      summary: Create an agent
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - name
-              properties:
-                name:
-                  type: string
-                template_id:
-                  type: string
-      responses:
-        '201':
-          description: Agent created
-
-  /agents/update-agent:
-    put:
-      tags:
-        - Agents
-      summary: Update an agent
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - agent_id
-              properties:
-                agent_id:
-                  type: string
-                name:
-                  type: string
-                template_id:
-                  type: string
-      responses:
-        '200':
-          description: Agent updated
-
-  /agents/delete-agent:
-    delete:
-      tags:
-        - Agents
-      summary: Delete an agent
-      parameters:
-        - name: agent_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Agent deleted
-
-  ### Logs Endpoints ###
-  /logs/fetch:
-    get:
-      tags:
-        - Logs
-      summary: Fetch logs
-      parameters:
-        - name: start_date
-          in: query
-          required: false
-          schema:
-            type: string
-            format: date
-        - name: end_date
-          in: query
-          required: false
-          schema:
-            type: string
-            format: date
-      responses:
-        '200':
-          description: Log data
-
-  /logs/delete:
-    delete:
-      tags:
-        - Logs
-      summary: Delete logs
-      parameters:
-        - name: log_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Log deleted
-
-  ### Calls Endpoints ###
-  /calls/get-call-info:
-    get:
-      tags:
-        - Calls
-      summary: Retrieve call information
-      parameters:
-        - name: call_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Call info
-
-  /calls/create-call:
-    post:
-      tags:
-        - Calls
-      summary: Create a call record
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - caller_id
-                - callee_id
-                - timestamp
-              properties:
-                caller_id:
-                  type: string
-                callee_id:
-                  type: string
-                timestamp:
-                  type: string
-                  format: date-time
-      responses:
-        '201':
-          description: Call created
-
-  /calls/update-call:
-    put:
-      tags:
-        - Calls
-      summary: Update call info
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - call_id
-              properties:
-                call_id:
-                  type: string
-                notes:
-                  type: string
-      responses:
-        '200':
-          description: Call updated
-
-  /calls/delete-call:
-    delete:
-      tags:
-        - Calls
-      summary: Delete a call record
-      parameters:
-        - name: call_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Call deleted
-
-  ### Knowledge Base Endpoints ###
-  /knowledge-base/search:
-    get:
-      tags:
-        - Knowledge Base
-      summary: Search the knowledge base
-      parameters:
-        - name: query
-          in: query
-          required:
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server
