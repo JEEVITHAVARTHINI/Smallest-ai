@@ -3,53 +3,7 @@ info:
   title: Smallest AI API
   version: 1.0.0
   description: |
-    Welcome to the Smallest AI API documentation. This guide will walk you through everything you need to get started using our endpoints effectively.
-
-    ### Authentication
-    All endpoints require an API key passed in the header:
-    ```bash
-    curl -H "Authorization: Bearer YOUR_API_KEY" https://api.smallest.ai/user/get-user-details
-    ```
-
-    #### Key Rotation
-    - Rotate keys periodically to reduce risk.
-    - Revoke old or compromised keys immediately.
-    - Use different keys for different environments (dev, staging, prod).
-
-    ### Error Codes & Troubleshooting
-    | Status Code | Meaning           | Troubleshooting Suggestion              |
-    |-------------|-------------------|------------------------------------------|
-    | 400         | Bad Request       | Check input format or required fields.  |
-    | 401         | Unauthorized      | Verify API key is valid and included.   |
-    | 404         | Not Found         | Ensure endpoint and path parameters are correct. |
-    | 500         | Server Error      | Retry or report to support.             |
-
-    ### SDK Usage
-    **Python Example:**
-    ```python
-    import requests
-    headers = {"Authorization": "Bearer YOUR_API_KEY"}
-    response = requests.get("https://api.smallest.ai/user/get-user-details", headers=headers)
-    print(response.json())
-    ```
-
-    **JavaScript Example:**
-    ```js
-    fetch("https://api.smallest.ai/user/get-user-details", {
-      headers: {"Authorization": "Bearer YOUR_API_KEY"}
-    }).then(res => res.json()).then(console.log);
-    ```
-
-    ### Endpoint Summary
-    | Tag             | Summary                           |
-    |------------------|------------------------------------|
-    | User             | Retrieve and manage user data      |
-    | Organization     | Manage organizations               |
-    | Agent Templates  | Work with agent templates          |
-    | Agents           | Operate and manage agents          |
-    | Logs             | Access and filter logs             |
-    | Calls            | Retrieve call info and transcripts |
-    | Knowledge Base   | Add, update, retrieve knowledge    |
+    Comprehensive Smallest AI API documentation with GET, POST, PUT, DELETE endpoints for all main resources.
 
 servers:
   - url: https://api.smallest.ai
@@ -57,53 +11,37 @@ servers:
 
 tags:
   - name: User
-    description: |
-      Retrieve and manage user-related data, including profile info, preferences, and credentials.
-      Perform CRUD operations and authentication management for users.
+    description: Retrieve and manage user-related data.
   - name: Organization
-    description: |
-      Manage organization data, settings, and membership.
-      Includes creating, updating, and removing organizations.
+    description: Manage organization data.
   - name: Agent Templates
-    description: |
-      Templates used to create agents with predefined configurations.
-      Manage templates for consistent agent creation.
+    description: Templates used to create agents.
   - name: Agents
-    description: |
-      Agent-related endpoints for creating, updating, retrieving, and deleting agents.
-      Manage agent lifecycle and operational parameters.
+    description: Agent-related endpoints.
   - name: Logs
-    description: |
-      Access logs and audit trails to monitor system events.
-      Filter, retrieve, and remove logs as needed for compliance.
+    description: Access logs and audit trails.
   - name: Calls
-    description: |
-      Call-related data and transcripts management.
-      Create, update, retrieve, and delete call records.
+    description: Call-related data and transcripts.
   - name: Knowledge Base
-    description: |
-      Upload and retrieve documents for AI knowledge base.
-      Perform full CRUD operations on knowledge content.
+    description: Upload and retrieve documents.
 
 paths:
-  # User endpoints (GET only example)
+
+  ### User Endpoints ###
   /user/get-user-details:
     get:
       tags:
         - User
       summary: Retrieve user info
-      description: Get detailed information about a user using their ID.
-      operationId: getUserDetails
       parameters:
         - name: user_id
           in: query
-          description: ID of the user
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: Successful response
+          description: User details
           content:
             application/json:
               schema:
@@ -111,74 +49,16 @@ paths:
                 properties:
                   user_id:
                     type: string
-                    example: "123"
                   name:
                     type: string
-                    example: "John Doe"
                   email:
                     type: string
-                    example: "john@example.com"
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '404':
-          description: Not Found
-        '500':
-          description: Server Error
-      security:
-        - bearerAuth: []
 
-  # Organization endpoints (GET only example)
-  /organization/get-org-details:
-    get:
-      tags:
-        - Organization
-      summary: Retrieve organization details
-      description: Fetch organization info by ID.
-      parameters:
-        - name: org_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful response
-
-  # Agent Templates endpoints (GET only example)
-  /agent-templates/list:
-    get:
-      tags:
-        - Agent Templates
-      summary: List agent templates
-      description: Retrieve all available agent templates.
-      responses:
-        '200':
-          description: Successful response
-
-  # Agents endpoints (GET + POST + PUT + DELETE)
-  /agents/get-agent:
-    get:
-      tags:
-        - Agents
-      summary: Retrieve agent details
-      description: Get detailed info about a specific agent.
-      parameters:
-        - name: agent_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful response
-  /agents/create-agent:
+  /user/create-user:
     post:
       tags:
-        - Agents
-      summary: Create a new agent
-      description: Create an agent using specified parameters.
+        - User
+      summary: Create a new user
       requestBody:
         required: true
         content:
@@ -187,7 +67,232 @@ paths:
               type: object
               required:
                 - name
+                - email
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: User created successfully
+
+  /user/update-user:
+    put:
+      tags:
+        - User
+      summary: Update user details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+              properties:
+                user_id:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: User updated successfully
+
+  /user/delete-user:
+    delete:
+      tags:
+        - User
+      summary: Delete a user
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted successfully
+
+  ### Organization Endpoints ###
+  /organization/get-org-details:
+    get:
+      tags:
+        - Organization
+      summary: Retrieve organization details
+      parameters:
+        - name: org_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Organization details
+
+  /organization/create-org:
+    post:
+      tags:
+        - Organization
+      summary: Create a new organization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                address:
+                  type: string
+      responses:
+        '201':
+          description: Organization created successfully
+
+  /organization/update-org:
+    put:
+      tags:
+        - Organization
+      summary: Update organization details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - org_id
+              properties:
+                org_id:
+                  type: string
+                name:
+                  type: string
+                address:
+                  type: string
+      responses:
+        '200':
+          description: Organization updated successfully
+
+  /organization/delete-org:
+    delete:
+      tags:
+        - Organization
+      summary: Delete an organization
+      parameters:
+        - name: org_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Organization deleted successfully
+
+  ### Agent Templates Endpoints ###
+  /agent-templates/list:
+    get:
+      tags:
+        - Agent Templates
+      summary: List agent templates
+      responses:
+        '200':
+          description: List of agent templates
+
+  /agent-templates/create:
+    post:
+      tags:
+        - Agent Templates
+      summary: Create an agent template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Agent template created
+
+  /agent-templates/update:
+    put:
+      tags:
+        - Agent Templates
+      summary: Update an agent template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
                 - template_id
+              properties:
+                template_id:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Agent template updated
+
+  /agent-templates/delete:
+    delete:
+      tags:
+        - Agent Templates
+      summary: Delete an agent template
+      parameters:
+        - name: template_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Agent template deleted
+
+  ### Agents Endpoints ###
+  /agents/get-agent:
+    get:
+      tags:
+        - Agents
+      summary: Retrieve agent details
+      parameters:
+        - name: agent_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Agent details
+
+  /agents/create-agent:
+    post:
+      tags:
+        - Agents
+      summary: Create an agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
               properties:
                 name:
                   type: string
@@ -196,12 +301,12 @@ paths:
       responses:
         '201':
           description: Agent created
+
   /agents/update-agent:
     put:
       tags:
         - Agents
-      summary: Update agent details
-      description: Update an existing agent's information.
+      summary: Update an agent
       requestBody:
         required: true
         content:
@@ -220,12 +325,12 @@ paths:
       responses:
         '200':
           description: Agent updated
+
   /agents/delete-agent:
     delete:
       tags:
         - Agents
       summary: Delete an agent
-      description: Remove an agent by ID.
       parameters:
         - name: agent_id
           in: query
@@ -236,22 +341,34 @@ paths:
         '204':
           description: Agent deleted
 
-  # Logs endpoints (GET + DELETE)
+  ### Logs Endpoints ###
   /logs/fetch:
     get:
       tags:
         - Logs
       summary: Fetch logs
-      description: Access log data with filtering options.
+      parameters:
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
       responses:
         '200':
-          description: Successful response
+          description: Log data
+
   /logs/delete:
     delete:
       tags:
         - Logs
-      summary: Delete a log entry
-      description: Delete a log entry by its ID.
+      summary: Delete logs
       parameters:
         - name: log_id
           in: query
@@ -262,13 +379,12 @@ paths:
         '204':
           description: Log deleted
 
-  # Calls endpoints (GET + POST + DELETE)
+  ### Calls Endpoints ###
   /calls/get-call-info:
     get:
       tags:
         - Calls
       summary: Retrieve call information
-      description: Get metadata or transcript of a call.
       parameters:
         - name: call_id
           in: query
@@ -277,13 +393,13 @@ paths:
             type: string
       responses:
         '200':
-          description: Successful response
+          description: Call info
+
   /calls/create-call:
     post:
       tags:
         - Calls
       summary: Create a call record
-      description: Create a new call with metadata.
       requestBody:
         required: true
         content:
@@ -305,12 +421,34 @@ paths:
       responses:
         '201':
           description: Call created
+
+  /calls/update-call:
+    put:
+      tags:
+        - Calls
+      summary: Update call info
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - call_id
+              properties:
+                call_id:
+                  type: string
+                notes:
+                  type: string
+      responses:
+        '200':
+          description: Call updated
+
   /calls/delete-call:
     delete:
       tags:
         - Calls
       summary: Delete a call record
-      description: Delete a call by its ID.
       parameters:
         - name: call_id
           in: query
@@ -321,8 +459,13 @@ paths:
         '204':
           description: Call deleted
 
-  # Knowledge Base endpoints (GET + POST + DELETE)
+  ### Knowledge Base Endpoints ###
   /knowledge-base/search:
     get:
       tags:
-        - Knowledge
+        - Knowledge Base
+      summary: Search the knowledge base
+      parameters:
+        - name: query
+          in: query
+          required:
