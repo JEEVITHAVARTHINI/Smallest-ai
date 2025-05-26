@@ -2,9 +2,8 @@ openapi: 3.0.3
 info:
   title: Smallest AI API
   version: 1.0.0
-  description: >
-    Comprehensive Smallest AI API documentation with GET, POST, PUT, DELETE endpoints
-    for all main resources with detailed tag descriptions.
+  description: |
+    Sample API with all tags and CRUD endpoints to verify display.
 
 servers:
   - url: https://api.smallest.ai
@@ -13,40 +12,36 @@ servers:
 tags:
   - name: User
     description: |
-      Retrieve and manage user-related data.
-      Perform CRUD operations on user profiles.
+      Manage user data including profile retrieval.
+      Create, update, and delete user accounts.
   - name: Organization
     description: |
-      Manage organization details and settings.
-      Create, update, and delete organizations.
+      Manage organizations and their settings.
+      Full CRUD operations for organizations.
   - name: Agent Templates
     description: |
-      Templates used for creating agents.
-      Manage template lifecycle and metadata.
+      Templates for agents used in the system.
+      Create, update, and manage templates.
   - name: Agents
     description: |
-      Manage agents created from templates.
-      Retrieve, update, and delete agent data.
+      Manage agent entities created from templates.
+      Full CRUD operations on agents.
   - name: Logs
     description: |
-      Access system logs and audit trails.
-      Filter and manage log entries effectively.
+      View and manage system logs.
+      Filter, retrieve, and delete log entries.
   - name: Calls
     description: |
-      Call records, transcripts, and metadata.
-      Create, update, and manage call information.
+      Manage call metadata and transcripts.
+      Create, update, and delete call records.
   - name: Knowledge Base
     description: |
-      Upload and retrieve documents and files.
-      Search and maintain the knowledge repository.
+      Upload, search, and manage documents.
+      Full CRUD for knowledge base content.
 
 paths:
 
-  # User endpoints omitted for brevity, assume same as before...
-
-  # Agent Templates endpoints omitted for brevity, assume same as before...
-
-  ### Agents Endpoints ###
+  # Agents example endpoints
   /agents/get-agent:
     get:
       tags:
@@ -60,13 +55,13 @@ paths:
             type: string
       responses:
         '200':
-          description: Agent details
+          description: Successful response
 
   /agents/create-agent:
     post:
       tags:
         - Agents
-      summary: Create an agent
+      summary: Create a new agent
       requestBody:
         required: true
         content:
@@ -89,7 +84,7 @@ paths:
     put:
       tags:
         - Agents
-      summary: Update an agent
+      summary: Update agent details
       requestBody:
         required: true
         content:
@@ -124,34 +119,21 @@ paths:
         '204':
           description: Agent deleted
 
-  ### Logs Endpoints ###
+  # Logs example endpoints
   /logs/fetch:
     get:
       tags:
         - Logs
       summary: Fetch logs
-      parameters:
-        - name: start_date
-          in: query
-          required: false
-          schema:
-            type: string
-            format: date
-        - name: end_date
-          in: query
-          required: false
-          schema:
-            type: string
-            format: date
       responses:
         '200':
-          description: Log data
+          description: Logs fetched
 
   /logs/delete:
     delete:
       tags:
         - Logs
-      summary: Delete logs
+      summary: Delete a log entry
       parameters:
         - name: log_id
           in: query
@@ -162,12 +144,12 @@ paths:
         '204':
           description: Log deleted
 
-  ### Calls Endpoints ###
+  # Calls example endpoints
   /calls/get-call-info:
     get:
       tags:
         - Calls
-      summary: Retrieve call information
+      summary: Get call information
       parameters:
         - name: call_id
           in: query
@@ -176,7 +158,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Call info
+          description: Call info retrieved
 
   /calls/create-call:
     post:
@@ -205,28 +187,6 @@ paths:
         '201':
           description: Call created
 
-  /calls/update-call:
-    put:
-      tags:
-        - Calls
-      summary: Update call info
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - call_id
-              properties:
-                call_id:
-                  type: string
-                notes:
-                  type: string
-      responses:
-        '200':
-          description: Call updated
-
   /calls/delete-call:
     delete:
       tags:
@@ -242,7 +202,7 @@ paths:
         '204':
           description: Call deleted
 
-  ### Knowledge Base Endpoints ###
+  # Knowledge Base example endpoints
   /knowledge-base/search:
     get:
       tags:
@@ -262,7 +222,7 @@ paths:
     post:
       tags:
         - Knowledge Base
-      summary: Upload a document
+      summary: Upload document
       requestBody:
         required: true
         content:
